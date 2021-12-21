@@ -1,6 +1,9 @@
 # vala-chat-server
 Vala chat server on WSL
 
+sudo apt install libjson-glib-dev
+
+
 Compile on WSL 
 ` valac server.vala --pkg gio-2.0`
 

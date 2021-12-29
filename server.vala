@@ -70,9 +70,13 @@ class MyThread {
 
     private void send_message_to_all(string sender, string message){
         foreach (SocketConnection entry in list) {
-            if(entry != conn){
-                entry.output_stream.write (json_message(this.chatID, sender, message.strip()).data);
-                entry.output_stream.write ("\n".data);
+			if(entry != conn){
+				try{
+					entry.output_stream.write (json_message(this.chatID, sender, message.strip()).data);
+					entry.output_stream.write ("\n".data);
+				}catch (Error e) {
+					list.remove_all (entry);
+				}
             }
         }  
     }

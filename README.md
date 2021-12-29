@@ -12,3 +12,8 @@ To obtain WSL 2 ip address use :
 
 use ncat as client :
 `ncat IP_ADDRESS 8080`
+
+
+test 
+
+`perl -e 'print "x" x 80 ;' | ncat IP_ADDRESS 8080`

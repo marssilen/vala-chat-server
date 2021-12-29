@@ -5,7 +5,7 @@ sudo apt install libjson-glib-dev
 
 
 Compile on WSL 
-` valac server.vala --pkg gio-2.0`
+` valac server.vala --pkg gio-2.0 --pkg json-glib-1.0`
 
 To obtain WSL 2 ip address use :
 `ip addr | grep eth0`

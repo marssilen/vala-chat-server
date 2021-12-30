@@ -1,6 +1,6 @@
 List<SocketConnection> list;
 void main () {
-    string welcomeStr = json_message(0, "server", "welcome to vala chat server");
+    string welcomeStr = json_message(0, "server", "welcome to vala chat server", 0);
 	print (welcomeStr);
 	print ("\n");
 
@@ -62,21 +62,23 @@ class ChatClient {
             }
     }
 
-    private void send_message_to_all(string sender, string message){
+    private async void send_message_to_all(string sender, string message){
         foreach (SocketConnection entry in list) {
-            if(entry != conn){
-                try{
-                    entry.output_stream.write (json_message(chatID, sender, message.strip()).data);
-                    entry.output_stream.write ("\n".data);
-                }catch (Error e) {
-                    list.remove_all (entry);
+            try{
+                if(entry != conn){
+                        yield entry.output_stream.write_async  (json_message(chatID, sender, message.strip(), 201).data);
+                        yield entry.output_stream.write_async  ("\n".data);
+                }else {
+                        yield entry.output_stream.write_async (json_message(0, sender, "message recived", 200).data);
                 }
+            }catch (Error e) {
+                list.remove_all (entry);
             }
         }  
     }
 }
 
-string json_message(uint id, string sender, string message){
+string json_message(uint id, string sender, string message, int status){
     Json.Builder builder = new Json.Builder ();
 
 	builder.begin_object ();
@@ -89,6 +91,9 @@ string json_message(uint id, string sender, string message){
 
 	builder.set_member_name ("message");
 	builder.add_string_value (message);
+
+    builder.set_member_name ("status");
+	builder.add_int_value (status);
 
 	builder.end_object ();
 
